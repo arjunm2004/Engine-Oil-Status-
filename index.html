@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Engine Oil Monitoring</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Engine Oil Monitoring Dashboard</h1>
+
+    <div class="card" id="oilQualityCard">
+      <h2>Oil Quality</h2>
+      <p id="oilQuality">Loading...</p>
+      <p id="oilStatus">Status: --</p>
+      <p class="label">Oil Quality</p>
+      <button onclick="toggleGraph('oilQualityGraph')">&#9660;</button>
+      <div id="oilQualityGraph" class="graph-container"></div>
+    </div>
+
+    <div class="card" id="oilPurityCard">
+      <h2>Oil Purity</h2>
+      <p id="conductivity">Loading...</p>
+      <p class="label">Oil Purity</p>
+      <button onclick="toggleGraph('conductivityGraph')">&#9660;</button>
+      <div id="conductivityGraph" class="graph-container"></div>
+    </div>
+
+    <div class="card" id="temperatureCard">
+      <h2>Temperature</h2>
+      <p id="temperature">Loading...</p>
+      <p class="label">Temperature</p>
+      <button onclick="toggleGraph('temperatureGraph')">&#9660;</button>
+      <div id="temperatureGraph" class="graph-container"></div>
+    </div>
+
+    <div class="card" id="oilLevelCard">
+      <h2>Oil Level</h2>
+      <p id="oilLevel">Loading...</p>
+      <p class="label">Oil Level</p>
+      <button onclick="toggleGraph('oilLevelGraph')">&#9660;</button>
+      <div id="oilLevelGraph" class="graph-container"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
