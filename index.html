@@ -1,49 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Engine Oil Monitoring</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engine Oil Monitoring</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
 </head>
 <body>
-  <div class="container">
-    <h1>Engine Oil Monitoring Dashboard</h1>
 
-    <div class="card" id="oilQualityCard">
-      <h2>Oil Quality</h2>
-      <p id="oilQuality">Loading...</p>
-      <p id="oilStatus">Status: --</p>
-      <p class="label">Oil Quality</p>
-      <button onclick="toggleGraph('oilQualityGraph')">&#9660;</button>
-      <div id="oilQualityGraph" class="graph-container"></div>
+    <div class="container">
+        <h1>Engine Oil Monitoring Data</h1>
+        <p class="date">Date: <span id="current-date"></span></p>
+
+        <!-- Oil Quality Section -->
+        <div class="parameter">
+            <div class="parameter-header">
+                <img src="icons/oil_quality.png" alt="Oil Quality Icon">
+                <div class="parameter-info">
+                    <h2>Oil Quality: <span id="oil-quality">--</span>%</h2>
+                    <p>Status: <span id="oil-quality-status">--</span></p>
+                </div>
+                <button class="dropdown-btn" onclick="toggleGraph('oilQualityGraph')">▼</button>
+            </div>
+            <div class="graph-container" id="oilQualityGraph">
+                <iframe src="THINGSPEAK_GRAPH_URL" frameborder="0"></iframe>
+            </div>
+        </div>
+
+        <!-- Temperature Section -->
+        <div class="parameter">
+            <div class="parameter-header">
+                <img src="icons/temperature.png" alt="Temperature Icon">
+                <div class="parameter-info">
+                    <h2>Temperature: <span id="temperature">--</span>°C</h2>
+                    <p>Status: <span id="temperature-status">--</span></p>
+                </div>
+                <button class="dropdown-btn" onclick="toggleGraph('temperatureGraph')">▼</button>
+            </div>
+            <div class="graph-container" id="temperatureGraph">
+                <iframe src="THINGSPEAK_GRAPH_URL" frameborder="0"></iframe>
+            </div>
+        </div>
+
+        <!-- Oil Purity Section -->
+        <div class="parameter">
+            <div class="parameter-header">
+                <img src="icons/oil_purity.png" alt="Oil Purity Icon">
+                <div class="parameter-info">
+                    <h2>Oil Purity: <span id="oil-purity">--</span>%</h2>
+                    <p>Status: <span id="oil-purity-status">--</span></p>
+                </div>
+                <button class="dropdown-btn" onclick="toggleGraph('oilPurityGraph')">▼</button>
+            </div>
+            <div class="graph-container" id="oilPurityGraph">
+                <iframe src="THINGSPEAK_GRAPH_URL" frameborder="0"></iframe>
+            </div>
+        </div>
+
+        <!-- Oil Level Section -->
+        <div class="parameter">
+            <div class="parameter-header">
+                <img src="icons/oil_level.png" alt="Oil Level Icon">
+                <div class="parameter-info">
+                    <h2>Oil Level: <span id="oil-level">--</span></h2>
+                    <p>Status: <span id="oil-level-status">--</span></p>
+                </div>
+                <button class="dropdown-btn" onclick="toggleGraph('oilLevelGraph')">▼</button>
+            </div>
+            <div class="graph-container" id="oilLevelGraph">
+                <iframe src="THINGSPEAK_GRAPH_URL" frameborder="0"></iframe>
+            </div>
+        </div>
+
+        <!-- Descriptive Text (As per your reference image) -->
+        <div class="description">
+            <p><strong>Oil Quality:</strong> Identifies the clarification of the oil which may be affected by impurities and overuse over time.</p>
+            <p><strong>Temperature:</strong> Indicates the working temperature of the oil inside the chamber. Ideal operating temperature (100-110°C).</p>
+            <p><strong>Oil Purity:</strong> Indicates any impurities inside the oil which may increase its conductivity. High conductivity means damaged oil.</p>
+            <p><strong>Oil Level:</strong> Indicates the oil level in the sump. To be checked when the vehicle is at rest.</p>
+        </div>
     </div>
 
-    <div class="card" id="oilPurityCard">
-      <h2>Oil Purity</h2>
-      <p id="conductivity">Loading...</p>
-      <p class="label">Oil Purity</p>
-      <button onclick="toggleGraph('conductivityGraph')">&#9660;</button>
-      <div id="conductivityGraph" class="graph-container"></div>
-    </div>
-
-    <div class="card" id="temperatureCard">
-      <h2>Temperature</h2>
-      <p id="temperature">Loading...</p>
-      <p class="label">Temperature</p>
-      <button onclick="toggleGraph('temperatureGraph')">&#9660;</button>
-      <div id="temperatureGraph" class="graph-container"></div>
-    </div>
-
-    <div class="card" id="oilLevelCard">
-      <h2>Oil Level</h2>
-      <p id="oilLevel">Loading...</p>
-      <p class="label">Oil Level</p>
-      <button onclick="toggleGraph('oilLevelGraph')">&#9660;</button>
-      <div id="oilLevelGraph" class="graph-container"></div>
-    </div>
-  </div>
-
-  <script src="script.js"></script>
 </body>
 </html>
+
