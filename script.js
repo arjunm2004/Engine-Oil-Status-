@@ -1,53 +1,80 @@
-document.addEventListener("DOMContentLoaded", function () {
-    // 🔧 Define your ThingSpeak Channel ID here
-    const channelId = "YOUR_CHANNEL_ID"; // Replace with your channel ID
-    const fieldMap = {
-        oilQuality: "field1",
-        temperature: "field2",
-        oilPurity: "field3",
-        oilLevel: "field4"
-    };
+// Replace with your ThingSpeak Channel ID and Read API Key
+const CHANNEL_ID = 'YOUR_CHANNEL_ID';
+const API_KEY = 'YOUR_READ_API_KEY';
 
-    const apiUrl = `https://api.thingspeak.com/channels/${channelId}/feeds.json?results=1`;
+// Mapping HTML element IDs to ThingSpeak fields
+const fields = {
+  oilQuality: 1,    
+  oilPurity: 2,     
+  temperature: 3,   
+  oilLevel: 4       
+};
 
-    // Function to toggle graph visibility
-    function toggleGraph(event) {
-        const dataBox = event.currentTarget;
-        const graph = dataBox.querySelector(".graph");
+// Update the status text from ThingSpeak every 15 seconds
+function updateStatus() {
+  fetch(`https://api.thingspeak.com/channels/${CHANNEL_ID}/feeds/last.json?api_key=${API_KEY}`)
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById('value-oil-quality').innerText = data[`field${fields.oilQuality}`];
+      document.getElementById('status-oil-quality').innerText = mapOilQuality(data[`field${fields.oilQuality}`]);
 
-        if (graph.style.display === "block") {
-            graph.style.display = "none";
-        } else {
-            graph.style.display = "block";
-        }
-    }
+      document.getElementById('value-oil-purity').innerText = data[`field${fields.oilPurity}`] + ' μS/cm';
+      document.getElementById('status-oil-purity').innerText = mapOilPurity(data[`field${fields.oilPurity}`]);
 
-    // Attach click event to all data boxes
-    document.querySelectorAll(".data-box").forEach(box => {
-        box.addEventListener("click", toggleGraph);
+      document.getElementById('value-temperature').innerText = data[`field${fields.temperature}`] + ' °C';
+      document.getElementById('status-temperature').innerText = mapTemperature(data[`field${fields.temperature}`]);
+
+      document.getElementById('value-oil-level').innerText = data[`field${fields.oilLevel}`];
+      document.getElementById('status-oil-level').innerText = mapOilLevel(data[`field${fields.oilLevel}`]);
+    })
+    .catch(error => {
+      console.error('Error fetching data:', error);
     });
+}
 
-    // Function to fetch and update sensor values
-    async function fetchSensorData() {
-        try {
-            const response = await fetch(apiUrl);
-            const data = await response.json();
+// Helper functions to interpret status messages
+function mapOilQuality(value) {
+  const num = parseFloat(value);
+  if (num >= 70) return 'Good';
+  else if (num >= 40) return 'Moderate';
+  else return 'Bad';
+}
 
-            if (data.feeds.length > 0) {
-                const latest = data.feeds[0];
+function mapOilPurity(value) {
+  const num = parseFloat(value);
+  if (num >= 80) return 'Good';
+  else if (num >= 50) return 'Moderate';
+  else return 'Bad';
+}
 
-                // Update UI with the latest data
-                document.getElementById("oil-quality").innerText = latest[fieldMap.oilQuality] + "%";
-                document.getElementById("temperature").innerText = latest[fieldMap.temperature] + "°C";
-                document.getElementById("oil-purity").innerText = latest[fieldMap.oilPurity] + "%";
-                document.getElementById("oil-level").innerText = latest[fieldMap.oilLevel];
-            }
-        } catch (error) {
-            console.error("Error fetching data:", error);
-        }
-    }
+function mapTemperature(value) {
+  const num = parseFloat(value);
+  if (num <= 80) return 'Normal';
+  else return 'Overheat';
+}
 
-    // Initial fetch and set interval
-    fetchSensorData();
-    setInterval(fetchSensorData, 5000); // Update every 5 seconds
-});
+function mapOilLevel(value) {
+  const num = parseFloat(value);
+  return num < 1 ? 'Low' : 'Good';
+}
+
+// Toggle the ThingSpeak graph iframe
+function toggleGraph(id, fieldNum) {
+  const graph = document.getElementById(id);
+  if (graph.style.display === 'none' || graph.style.display === '') {
+    graph.style.display = 'block';
+    graph.innerHTML = `
+      <iframe width="100%" height="260" style="border:1px solid #ccc"
+        src="https://thingspeak.com/channels/${CHANNEL_ID}/charts/${fieldNum}?bgcolor=%23ffffff&color=%23d62020&dynamic=true&type=line&results=60">
+      </iframe>`;
+  } else {
+    graph.style.display = 'none';
+    graph.innerHTML = '';
+  }
+}
+
+// Initial update
+updateStatus();
+
+// Repeat update every 15 seconds
+setInterval(updateStatus, 15000);
