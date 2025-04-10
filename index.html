@@ -2,12 +2,25 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>IoT Oil Monitoring Dashboard</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css"/>
   <script src="script.js" defer></script>
 </head>
 <body>
+  <div class="header">
+    <div class="date-display" id="current-date">Loading date...</div>
+    <div class="controls">
+      <label for="date-picker">Select Date: </label>
+      <input type="date" id="date-picker" />
+      <label class="switch">
+        <input type="checkbox" id="mode-toggle" onchange="toggleMode()" />
+        <span class="slider"></span>
+      </label>
+      <span id="mode-label">Live</span>
+    </div>
+  </div>
+
   <div class="container">
     <h1>Engine Oil Monitoring System</h1>
 
@@ -57,7 +70,6 @@
       <p><strong>Temperature:</strong> Measures the real-time temperature of the engine oil to detect overheating.</p>
       <p><strong>Oil Level:</strong> Ensures the oil level is sufficient for proper engine lubrication.</p>
     </div>
-
   </div>
 </body>
 </html>
