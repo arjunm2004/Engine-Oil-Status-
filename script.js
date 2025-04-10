@@ -1,6 +1,6 @@
 // Replace with your ThingSpeak Channel ID and Read API Key
-const CHANNEL_ID = 'YOUR_CHANNEL_ID';
-const API_KEY = 'YOUR_READ_API_KEY';
+const CHANNEL_ID = '2901954';
+const API_KEY = 'Z4VBUE2OIARQXHEV';
 
 // Mapping HTML element IDs to ThingSpeak fields
 const fields = {
@@ -35,7 +35,7 @@ function updateStatus() {
 // Helper functions to interpret status messages
 function mapOilQuality(value) {
   const num = parseFloat(value);
-  if (num >= 70) return 'Good';
+  if (num >= 80) return 'Good';
   else if (num >= 40) return 'Moderate';
   else return 'Bad';
 }
