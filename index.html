@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>IoT Oil Monitoring Dashboard</title>
   <link rel="stylesheet" href="style.css"/>
+  <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
   <script src="script.js" defer></script>
 </head>
 <body>
@@ -14,7 +15,7 @@
       <label for="date-picker">Select Date: </label>
       <input type="date" id="date-picker" />
       <label class="switch">
-        <input type="checkbox" id="mode-toggle" onchange="toggleMode()" />
+        <input type="checkbox" id="mode-toggle" checked />
         <span class="slider"></span>
       </label>
       <span id="mode-label">Live</span>
@@ -24,13 +25,19 @@
   <div class="container">
     <h1>Engine Oil Monitoring System</h1>
 
+    <div class="history-controls" id="history-controls" style="display:none;">
+      <button onclick="exportData()" class="export-btn">Export Data as CSV</button>
+    </div>
+
+    <div class="stats-summary" id="stats-summary"></div>
+
     <div class="card" id="oil-quality">
       <div class="card-header">
         <h2>Oil Quality</h2>
         <button class="toggle-btn" onclick="toggleGraph('graph-oil-quality', 1)">&#9660;</button>
       </div>
       <p class="value">Value: <span id="value-oil-quality">Loading...</span></p>
-      <p class="status">Status: <span id="status-oil-quality">Loading...</span></p>
+      <p class="status">Status: <span id="status-oil-quality" data-status="">Loading...</span></p>
       <div class="graph" id="graph-oil-quality"></div>
     </div>
 
@@ -40,7 +47,7 @@
         <button class="toggle-btn" onclick="toggleGraph('graph-oil-purity', 2)">&#9660;</button>
       </div>
       <p class="value">Value: <span id="value-oil-purity">Loading...</span></p>
-      <p class="status">Status: <span id="status-oil-purity">Loading...</span></p>
+      <p class="status">Status: <span id="status-oil-purity" data-status="">Loading...</span></p>
       <div class="graph" id="graph-oil-purity"></div>
     </div>
 
@@ -50,7 +57,7 @@
         <button class="toggle-btn" onclick="toggleGraph('graph-temperature', 3)">&#9660;</button>
       </div>
       <p class="value">Value: <span id="value-temperature">Loading...</span></p>
-      <p class="status">Status: <span id="status-temperature">Loading...</span></p>
+      <p class="status">Status: <span id="status-temperature" data-status="">Loading...</span></p>
       <div class="graph" id="graph-temperature"></div>
     </div>
 
@@ -60,15 +67,16 @@
         <button class="toggle-btn" onclick="toggleGraph('graph-oil-level', 4)">&#9660;</button>
       </div>
       <p class="value">Value: <span id="value-oil-level">Loading...</span></p>
-      <p class="status">Status: <span id="status-oil-level">Loading...</span></p>
+      <p class="status">Status: <span id="status-oil-level" data-status="">Loading...</span></p>
       <div class="graph" id="graph-oil-level"></div>
     </div>
 
     <div class="description">
-      <p><strong>Oil Quality:</strong> Determines the overall condition of the engine oil based on its turbidity level.</p>
-      <p><strong>Oil Purity:</strong> Indicates the level of contaminants in the oil using a conductivity sensor.</p>
-      <p><strong>Temperature:</strong> Measures the real-time temperature of the engine oil to detect overheating.</p>
-      <p><strong>Oil Level:</strong> Ensures the oil level is sufficient for proper engine lubrication.</p>
+      <h3>Sensor Information</h3>
+      <p><strong>Oil Quality:</strong> Determines the overall condition of the engine oil based on its turbidity level (0-100 scale).</p>
+      <p><strong>Oil Purity:</strong> Indicates the level of contaminants in the oil using a conductivity sensor (measured in μS/cm).</p>
+      <p><strong>Temperature:</strong> Measures the real-time temperature of the engine oil to detect overheating (measured in °C).</p>
+      <p><strong>Oil Level:</strong> Ensures the oil level is sufficient for proper engine lubrication (0 = Low, 1 = Good).</p>
     </div>
   </div>
 </body>
