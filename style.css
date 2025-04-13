@@ -165,8 +165,8 @@ h3 {
 .switch {
   position: relative;
   display: inline-block;
-  width: 60px;
-  height: 24px;
+  width: 34px;
+  height: 20px;
 }
 
 .switch input {
@@ -190,10 +190,10 @@ h3 {
 .slider:before {
   position: absolute;
   content: "";
-  height: 16px;
-  width: 16px;
-  left: 4px;
-  bottom: 4px;
+  height: 14px;
+  width: 14px;
+  left: 3px;
+  bottom: 3px;
   background-color: white;
   transition: .4s;
   border-radius: 50%;
@@ -204,7 +204,7 @@ input:checked + .slider {
 }
 
 input:checked + .slider:before {
-  transform: translateX(21px);
+  transform: translateX(14px);
 }
 
 #mode-label {
