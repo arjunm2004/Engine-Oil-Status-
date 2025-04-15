@@ -295,7 +295,11 @@ function drawChart(containerId, feeds, fieldNum) {
       dataPoints,
       color: "#3498db",
       lineThickness: 2
-    }]
+    }],
+    zoomEnabled: true,
+    panEnabled: true,
+    zoomType: "xy",
+    exportEnabled: true
   });
   chart.render();
 }
