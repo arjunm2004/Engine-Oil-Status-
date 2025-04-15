@@ -278,6 +278,7 @@ input:checked + .slider:before {
   .switch {
     align-self: flex-start;
     margin-top: 5px;
+    width: 50px !important;
   }
   
   #mode-label {
