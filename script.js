@@ -183,7 +183,7 @@ function mapOilPurity(val) {
 function mapTemperature(val) {
   const num = parseFloat(val);
   if (isNaN(num)) return 'Unknown';
-  return num <= 80 ? 'Normal' : 'Overheat';
+  return num <= 80 ? 'Normal' : num <= 110 ? 'Moderate' : 'Overheat';
 }
 
 function mapOilLevel(val) {
