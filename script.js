@@ -11,6 +11,7 @@ const fields = {
 let liveMode = true;
 let updateInterval;
 let currentHistoryData = [];
+let lastAlertTimes = {}; // To track when we last showed an alert for each parameter
 
 function updateStatus() {
   if (!liveMode) return;
@@ -29,12 +30,19 @@ function updateStatus() {
 function updateUI(data) {
   if (!data) return;
 
+  // Check and update each parameter with alert functionality
   if (data[`field${fields.oilQuality}`] !== undefined) {
     const value = data[`field${fields.oilQuality}`];
     const status = mapOilQuality(value);
     document.getElementById('value-oil-quality').textContent = value;
     document.getElementById('status-oil-quality').textContent = status;
     document.getElementById('status-oil-quality').setAttribute('data-status', status);
+    
+    // Show alert if status is bad and we haven't shown it in the last 5 minutes
+    if (status === 'Bad' && (!lastAlertTimes.oilQuality || Date.now() - lastAlertTimes.oilQuality > 300000)) {
+      showAlert('Oil Quality Alert', 'Oil quality has reached a critical level (BAD)!');
+      lastAlertTimes.oilQuality = Date.now();
+    }
   }
 
   if (data[`field${fields.oilPurity}`] !== undefined) {
@@ -43,6 +51,11 @@ function updateUI(data) {
     document.getElementById('value-oil-purity').textContent = value + ' μS/cm';
     document.getElementById('status-oil-purity').textContent = status;
     document.getElementById('status-oil-purity').setAttribute('data-status', status);
+    
+    if (status === 'Bad' && (!lastAlertTimes.oilPurity || Date.now() - lastAlertTimes.oilPurity > 300000)) {
+      showAlert('Oil Purity Alert', 'Oil purity has reached a critical level (BAD)!');
+      lastAlertTimes.oilPurity = Date.now();
+    }
   }
 
   if (data[`field${fields.temperature}`] !== undefined) {
@@ -51,6 +64,11 @@ function updateUI(data) {
     document.getElementById('value-temperature').textContent = value + ' °C';
     document.getElementById('status-temperature').textContent = status;
     document.getElementById('status-temperature').setAttribute('data-status', status);
+    
+    if (status === 'Overheat' && (!lastAlertTimes.temperature || Date.now() - lastAlertTimes.temperature > 300000)) {
+      showAlert('Temperature Alert', 'Oil temperature is too high (OVERHEAT)!');
+      lastAlertTimes.temperature = Date.now();
+    }
   }
 
   if (data[`field${fields.oilLevel}`] !== undefined) {
@@ -59,8 +77,75 @@ function updateUI(data) {
     document.getElementById('value-oil-level').textContent = value;
     document.getElementById('status-oil-level').textContent = status;
     document.getElementById('status-oil-level').setAttribute('data-status', status);
+    
+    if (status === 'Low' && (!lastAlertTimes.oilLevel || Date.now() - lastAlertTimes.oilLevel > 300000)) {
+      showAlert('Oil Level Alert', 'Oil level is too low!');
+      lastAlertTimes.oilLevel = Date.now();
+    }
   }
 }
+
+function showAlert(title, message) {
+  // Create notification popup
+  const notification = document.createElement('div');
+  notification.className = 'notification-alert';
+  notification.innerHTML = `
+    <div class="notification-content">
+      <h3>${title}</h3>
+      <p>${message}</p>
+      <button onclick="this.parentElement.parentElement.remove()">OK</button>
+    </div>
+  `;
+  
+  // Add styles dynamically
+  const style = document.createElement('style');
+  style.textContent = `
+    .notification-alert {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #e74c3c;
+      color: white;
+      padding: 15px;
+      border-radius: 5px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      z-index: 1000;
+      animation: slideIn 0.5s forwards;
+    }
+    .notification-content h3 {
+      margin: 0 0 10px 0;
+      color: white;
+    }
+    .notification-content p {
+      margin: 0 0 15px 0;
+    }
+    .notification-content button {
+      background-color: white;
+      color: #e74c3c;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+    @keyframes slideIn {
+      from { transform: translateX(100%); }
+      to { transform: translateX(0); }
+    }
+  `;
+  document.head.appendChild(style);
+  
+  document.body.appendChild(notification);
+  
+  // Auto-remove after 10 seconds
+  setTimeout(() => {
+    if (notification.parentNode) {
+      notification.remove();
+    }
+  }, 10000);
+}
+
+// Make showAlert available globally for the OK button
+window.showAlert = showAlert;
 
 function toggleGraph(id, fieldNum) {
   const graph = document.getElementById(id);
