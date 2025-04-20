@@ -278,6 +278,7 @@ body {
     .switch {
       align-self: flex-start;
       margin-top: 5px;
+      width: 50px !important;
     }
     
     #mode-label {
@@ -330,3 +331,4 @@ body {
       line-height: 1.5;
     }
   }
+  
